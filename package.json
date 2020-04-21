@@ -19,5 +19,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "run": "node src/index.js"
   }
 }
