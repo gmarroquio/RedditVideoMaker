@@ -6,8 +6,8 @@ Videos feitos com o programa podem ser encontrados [aqui](https://www.youtube.co
 
 ## Pré-requisitos
 
- - git
- - Node
+- git
+- Node
 
 ## Funcionalidades Principais
 
@@ -21,6 +21,7 @@ Videos feitos com o programa podem ser encontrados [aqui](https://www.youtube.co
 ## Instalação
 
 Clone o repositorio em seu computador e na pasta raiz rode `npm install` ou `yarn`
+
 ```bash
 # Clone this repository
 $ git clone https://github.com/GMarroquio/RedditVideoMaker
@@ -37,10 +38,11 @@ $ yarn install
 Dentro da pasta `credentials` cole as credenciais do google cloud text-to-speech e do youtube com os nomes `tts.json` e `yt.json` respectivamente
 
 Dentro do arquivo `links.json` cole todos os links que deseja transformar em video
+
 ```json
-[
- "reddit.com/r/...",
- "reddit.com/r/...",
- "reddit.com/r/..."
-]
+["reddit.com/r/...", "reddit.com/r/...", "reddit.com/r/..."]
 ```
+
+Abra o terminal e execute `yarn run`
+
+PS. O limite de uploads da api gratuita do Youtube é de 10000 créditos por dia e cada video consome 1605 créditos, o que permite o envio de 6 videos por dia.
