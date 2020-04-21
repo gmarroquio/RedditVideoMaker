@@ -93,7 +93,9 @@ async function upload(post) {
   const videoInformation = await uploadVideo(post);
 
   async function uploadVideo(post) {
-    const videoFilePath = `dist/${post.title} - ${post.sub.split("/")[1]}.mp4`;
+    const videoFilePath = `videos/${post.title} - ${
+      post.sub.split("/")[1]
+    }.mp4`;
     const videoFileSize = fs.statSync(videoFilePath).size;
     const videoTitle = `${
       post.title.length > 80 ? post.title.split(" ")[0] : post.title
