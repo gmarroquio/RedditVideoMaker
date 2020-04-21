@@ -45,7 +45,7 @@ Dentro do arquivo `links.json` cole todos os links que deseja transformar em vid
 
 Abra o terminal e execute `yarn run`
 
-Os videos serão salvos na pasta videos
+Os videos serão salvos na pasta `videos`
 
 ### Upload automatico
 
