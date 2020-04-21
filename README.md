@@ -30,7 +30,17 @@ $ cd RedditVideoMaker
 
 # Install dependencies
 $ yarn install
+```
 
-# Run the app
-$ yarn run
+## Como usar
+
+Dentro da pasta `credentials` cole as credenciais do google cloud text-to-speech e do youtube com os nomes `tts.json` e `yt.json` respectivamente
+
+Dentro do arquivo `links.json` cole todos os links que deseja transformar em video
+```json
+[
+ "reddit.com/r/...",
+ "reddit.com/r/...",
+ "reddit.com/r/..."
+]
 ```
