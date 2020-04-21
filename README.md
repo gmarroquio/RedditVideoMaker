@@ -16,7 +16,7 @@ Videos feitos com o programa podem ser encontrados [aqui](https://www.youtube.co
 - Usa a api Text-to-Speech do Google para gerar as falas
 - Juntas as imagens com os arquivos de audio em clips
 - Junta todos os clips em ordem pra gerar o video completo
-- Faz upload automaticamente para o Youtube
+- Faz upload automaticamente para o Youtube (Opcional)
 
 ## Instalação
 
@@ -35,7 +35,7 @@ $ yarn install
 
 ## Como usar
 
-Dentro da pasta `credentials` cole as credenciais do google cloud text-to-speech e do youtube com os nomes `tts.json` e `yt.json` respectivamente
+Dentro da pasta `credentials` cole a credencial do google cloud text-to-speech com o nome `tts.json`
 
 Dentro do arquivo `links.json` cole todos os links que deseja transformar em video
 
@@ -44,5 +44,17 @@ Dentro do arquivo `links.json` cole todos os links que deseja transformar em vid
 ```
 
 Abra o terminal e execute `yarn run`
+
+Os videos serão salvos na pasta videos
+
+### Upload automatico
+
+Dentro da pasta `credential` cole a credencial do Youtube com o nome de `yt.json`
+
+Na hora de executar o passe a flag -y
+
+```bash
+$ yarn run -y
+```
 
 PS. O limite de uploads da api gratuita do Youtube é de 10000 créditos por dia e cada video consome 1605 créditos, o que permite o envio de 6 videos por dia.
