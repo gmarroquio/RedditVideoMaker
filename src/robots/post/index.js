@@ -25,7 +25,7 @@ async function baixaPost(link) {
     user: `u/${p.author}`,
     story: p.selftext.split("\n").filter((a) => a.length > 0),
   };
-  fs.writeFileSync("script.json", JSON.stringify(data));
+  // fs.writeFileSync("script.json", JSON.stringify(data));
   return data;
 }
 
