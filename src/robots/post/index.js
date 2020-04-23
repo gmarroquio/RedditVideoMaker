@@ -173,6 +173,8 @@ async function searchPosts() {
   const url = `${sub}/${filter}/?${time ? `t=${time}&` : ""}limit=${limit}`;
 
   const { data } = await api.get(url);
+
+  //Fazer a pesquisa dos posts com offset
   console.log(data);
 }
 
