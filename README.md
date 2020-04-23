@@ -54,7 +54,17 @@ Dentro da pasta `credential` cole a credencial do Youtube com o nome de `yt.json
 Na hora de executar o passe a flag -y
 
 ```bash
-$ yarn run -y
+$ yarn start -y
 ```
 
-PS. O limite de uploads da api gratuita do Youtube é de 10000 créditos por dia e cada video consome 1605 créditos, o que permite o envio de 6 videos por dia.
+obs: O limite de uploads da api gratuita do Youtube é de 10000 créditos por dia e cada video consome 1605 créditos, o que permite o envio de 6 videos por dia.
+
+### Limpeza de arquivos
+
+Caso não queira apagar os arquivos temporários execute o programa com a flag -c
+
+```bash
+$ yarn start -c
+```
+
+obs: Com essa flag o programa só fara o vídeo do primeiro link
