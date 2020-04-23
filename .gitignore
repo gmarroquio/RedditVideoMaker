@@ -3,6 +3,7 @@ font/ttf
 credentials/*
 !credentials/.gitkeep
 testes.js
+favs.json
 
 dist/audio/*
 dist/clips/*
