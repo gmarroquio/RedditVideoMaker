@@ -23,6 +23,9 @@ async function baixaPost(link) {
       datefns.differenceInDays(hj, datefns.fromUnixTime(p.created_utc))
     ),
     user: `u/${p.author}`,
+    awards: p.all_awardings.map((a) => {
+      return { name: a.name, id: a.id, url: a.icon_url };
+    }),
     story: p.selftext
       .replace(/[‘’]/g, "'")
       .replace(/[“”]/g, '"')
@@ -35,6 +38,7 @@ async function baixaPost(link) {
     `scripts/${data.title.replace("/", "-")}.json`,
     JSON.stringify(data)
   );
+
   return data;
 }
 

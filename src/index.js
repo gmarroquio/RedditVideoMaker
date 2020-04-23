@@ -20,19 +20,27 @@ async function iniciar(link, uploadVar) {
 }
 
 async function start() {
-  //console.log(`> Cleaning videos...`);
-  //exec("sh limpaVideos.sh");
-  var uploadVar = false;
-  if (process.argv.includes("-y")) {
-    uploadVar = true;
-  }
-  if (uploadVar) await authenticate();
+  const uploadVar = process.argv.includes("-y");
+  const cleanVar = !process.argv.includes("-c");
+  cleanVideos(cleanVar);
+  if (process.argv.includes("-y")) await authenticate();
   for (link of links) {
-    console.log(`> Cleaning dist...`);
-    exec("sh limpaDist.sh");
+    cleanDist(cleanVar);
     await iniciar(link.split(".com")[1], uploadVar);
   }
-  console.log(`> Cleaning dist...`);
-  exec("sh limpaDist.sh");
+  cleanDist(cleanVar);
 }
 start();
+
+function cleanVideos(cleanVar) {
+  if (cleanVar) {
+    console.log(`> Cleaning videos...`);
+    exec("sh limpaVideos.sh");
+  }
+}
+function cleanDist(cleanVar) {
+  if (cleanVar) {
+    console.log(`> Cleaning dist...`);
+    exec("sh limpaDist.sh");
+  }
+}
