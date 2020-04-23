@@ -134,7 +134,7 @@ async function criaUps(ups) {
 async function criaTitulo(script) {
   console.log("> Making Title.png");
   await criaHeader(script.sub, script.user, script.days);
-  await criaUps(script.ups);
+  await criaUps(String(script.ups));
   await juntaTitulo(script.title.replace(/[‘’]/g, "'").replace(/[“”]+/g, '"'));
 }
 
@@ -155,9 +155,7 @@ async function criaFotos({ story: script }) {
     var text = "";
     for (var i = 0; i < frases.length; i++) {
       if (frases[i].length > 0) {
-        text = text.concat(
-          frases[i].replace(/[‘’]/g, "'").replace(/[“”]+/g, '"')
-        );
+        text = text.concat(frases[i]);
         await print(text, i, paragrafo, numPar);
       }
     }

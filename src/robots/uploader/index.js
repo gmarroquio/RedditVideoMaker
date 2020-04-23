@@ -159,13 +159,17 @@ async function upload(post) {
       },
     };
 
-    const youtubeRsponse = await youtube.videos.insert(requestParameters, {
-      onUploadProgress: onUploadProgress,
-    });
-    console.log(
-      `> Video available at: https://youtu.be/${youtubeRsponse.data.id}`
-    );
-    return youtubeRsponse.data;
+    try {
+      const youtubeRsponse = await youtube.videos.insert(requestParameters, {
+        onUploadProgress: onUploadProgress,
+      });
+      console.log(
+        `> Video available at: https://youtu.be/${youtubeRsponse.data.id}`
+      );
+    } catch (err) {
+      console.log(`> Unable to upload video ${videoTitle}`);
+      console(err);
+    }
 
     function onUploadProgress(e) {
       const progress = Math.round((e.bytesRead / videoFileSize) * 100);

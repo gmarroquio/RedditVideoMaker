@@ -7,7 +7,7 @@ const exec = require("child_process").exec;
 const fs = require("fs");
 const links = JSON.parse(fs.readFileSync("links.json", "utf-8"));
 
-async function iniciar(link, upload) {
+async function iniciar(link, uploadVar) {
   const post = await baixaPost(link);
   console.log(`> Making ${post.title} video`);
 
@@ -16,19 +16,23 @@ async function iniciar(link, upload) {
   await image.criaTitulo(post);
   await audio.baixaAudio(post);
   await video.criaVideo(post);
-  if (upload) await upload(post);
-  console.log(`> Cleaning dist...`);
-  exec("sh limpaDist.sh");
+  if (uploadVar) await upload(post);
 }
 
 async function start() {
-  var upload = false;
+  //console.log(`> Cleaning videos...`);
+  //exec("sh limpaVideos.sh");
+  var uploadVar = false;
   if (process.argv.includes("-y")) {
-    upload = true;
+    uploadVar = true;
   }
-  if (upload) await authenticate();
+  if (uploadVar) await authenticate();
   for (link of links) {
-    await iniciar(link.split(".com")[1], upload);
+    console.log(`> Cleaning dist...`);
+    exec("sh limpaDist.sh");
+    await iniciar(link.split(".com")[1], uploadVar);
   }
+  console.log(`> Cleaning dist...`);
+  exec("sh limpaDist.sh");
 }
 start();
