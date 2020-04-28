@@ -22,13 +22,14 @@ async function iniciar(link, uploadVar) {
 async function start() {
   const uploadVar = process.argv.includes("-y");
   const cleanVar = !process.argv.includes("-c");
-  cleanVideos(cleanVar);
+  //cleanVideos(cleanVar);
   if (process.argv.includes("-y")) await authenticate();
   for (link of links) {
     cleanDist(cleanVar);
     await iniciar(link.split(".com")[1], uploadVar);
   }
   cleanDist(cleanVar);
+  exec("sh criaGitkeep.sh");
 }
 start();
 

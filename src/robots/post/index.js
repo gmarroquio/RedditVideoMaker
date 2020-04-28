@@ -29,6 +29,9 @@ async function baixaPost(link) {
     story: p.selftext
       .replace(/[‘’]/g, "'")
       .replace(/[“”]/g, '"')
+      .replace(/\*/g, "")
+      .replace(/[\[]/g, "[")
+      .replace(/[\]]/g, "]")
       .replace(/\*\*/g, "")
       .replace(/~~/g, "")
       .split("\n")
