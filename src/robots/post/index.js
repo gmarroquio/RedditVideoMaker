@@ -34,6 +34,7 @@ async function baixaPost(link) {
       .replace(/[\]]/g, "]")
       .replace(/\*\*/g, "")
       .replace(/~~/g, "")
+      .replace(/\([\w+/:.]+\)/g, "")
       .split("\n")
       .filter((a) => a.length > 0),
   };
