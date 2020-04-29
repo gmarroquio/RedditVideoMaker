@@ -61,10 +61,10 @@ obs: O limite de uploads da api gratuita do Youtube é de 10000 créditos por di
 
 ### Limpeza de arquivos
 
-Caso não queira apagar os arquivos temporários execute o programa com a flag -c
+Caso não queira apagar os arquivos temporários execute o programa com a flag -c:d
 
 ```bash
-$ yarn start -c
+$ yarn start -c:d
 ```
 
 obs: Com essa flag o programa só fara o vídeo do primeiro link

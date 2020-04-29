@@ -5,6 +5,7 @@ credentials/*
 testes.js
 teste.txt
 teste.json
+favs.json
 
 dist/audio/*
 dist/clips/*

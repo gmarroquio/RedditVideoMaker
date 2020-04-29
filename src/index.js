@@ -1,11 +1,10 @@
 const image = require("./robots/image");
 const audio = require("./robots/audio");
 const video = require("./robots/video");
-const { baixaPost } = require("./robots/post");
+const { baixaPost, searchPosts } = require("./robots/post");
 const { upload, authenticate } = require("./robots/uploader");
 const exec = require("child_process").exec;
 const fs = require("fs");
-const links = JSON.parse(fs.readFileSync("links.json", "utf-8"));
 
 async function iniciar(link, uploadVar) {
   const post = await baixaPost(link);
@@ -20,16 +19,29 @@ async function iniciar(link, uploadVar) {
 }
 
 async function start() {
-  const uploadVar = process.argv.includes("-y");
-  const cleanVar = !process.argv.includes("-c");
-  //cleanVideos(cleanVar);
+  const uploadVar = process.argv.includes("-y"); //Upload pro yt se passar
+  const cleanDistVar = !process.argv.includes("-c:d"); //Limpar dist se não passar
+  const cleanVideoVar = process.argv.includes("-c:v"); //Limpar videos se passar
+
+  const links = process.argv.includes("-s")
+    ? await searchPosts()
+    : JSON.parse(fs.readFileSync("links.json", "utf-8"));
+
+  // Limpa a pasta videos
+  cleanVideos(cleanVideoVar);
+
   if (process.argv.includes("-y")) await authenticate();
+
   for (link of links) {
-    cleanDist(cleanVar);
+    //Limpa a pasta de arquivos temporarios
+    cleanDist(cleanDistVar);
+
+    //Execução do programa
     await iniciar(link.split(".com")[1], uploadVar);
   }
-  cleanDist(cleanVar);
-  exec("sh criaGitkeep.sh");
+
+  //Limpa a pasta de arquivos temporarios
+  cleanDist(cleanDistVar);
 }
 start();
 
