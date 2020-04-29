@@ -11,10 +11,10 @@ async function iniciar(link, uploadVar) {
   console.log(`> Making ${post.title} video`);
 
   // const post = JSON.parse(fs.readFileSync("script.json", "utf-8"));
-  await image.criaFotos(post);
+  // await image.criaFotos(post);
   await image.criaTitulo(post);
-  await audio.baixaAudio(post);
-  await video.criaVideo(post);
+  // await audio.baixaAudio(post);
+  // await video.criaVideo(post);
   if (uploadVar) await upload(post);
 }
 
@@ -38,6 +38,7 @@ async function start() {
 
     //Execução do programa
     await iniciar(link.split(".com")[1], uploadVar);
+    if (!cleanDistVar) break;
   }
 
   //Limpa a pasta de arquivos temporarios
