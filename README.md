@@ -35,6 +35,8 @@ $ yarn install
 
 ## Como usar
 
+#### Credenciais
+
 Dentro da pasta `credentials` cole a credencial do google cloud text-to-speech com o nome `tts.json`
 
 Dentro do arquivo `links.json` cole todos os links que deseja transformar em video
@@ -42,6 +44,24 @@ Dentro do arquivo `links.json` cole todos os links que deseja transformar em vid
 ```json
 ["reddit.com/r/...", "reddit.com/r/...", "reddit.com/r/..."]
 ```
+
+#### Logo do subreddit
+
+Dentro da pasta `assets/templates` cole o logo do sub com o nome do sub todo em minusculo e com a extenção `.png`
+
+```
+#exemplo
+Para o subreddit r/ProRevenge
+ - prorevenge.png
+```
+
+A imagem deve ter 60px x 60px
+
+#### Final do video
+
+Para o final do video, dentro da pasta `assets/video` cole o do fim com o nome `fim.mp3` e a imagem final com o nome `fim.png`. O programa ira gerar um arquivo chamado `fim.avi` que será usado em todos os videos. Se ja exister um arquivo `fim.avi` dentro da pasta, ele não é sobrescrito
+
+#### Executar o programa
 
 Abra o terminal e execute `yarn run`
 
