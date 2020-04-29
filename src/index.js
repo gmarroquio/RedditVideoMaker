@@ -19,29 +19,29 @@ async function iniciar(link, uploadVar) {
 }
 
 async function start() {
-  const uploadVar = process.argv.includes("-y");
-  const cleanDistVar = !process.argv.includes("-c:d");
-  const cleanVideoVar = process.argv.includes("-c:v");
+  const uploadVar = process.argv.includes("-y"); //Upload pro yt se passar
+  const cleanDistVar = !process.argv.includes("-c:d"); //Limpar dist se não passar
+  const cleanVideoVar = process.argv.includes("-c:v"); //Limpar videos se passar
 
   const links = process.argv.includes("-s")
     ? await searchPosts()
     : JSON.parse(fs.readFileSync("links.json", "utf-8"));
 
   // Limpa a pasta videos
-  // cleanVideos(cleanVideoVar);
+  cleanVideos(cleanVideoVar);
 
-  // if (process.argv.includes("-y")) await authenticate();
+  if (process.argv.includes("-y")) await authenticate();
 
-  // for (link of links) {
-  //   //Limpa a pasta de arquivos temporarios
-  //   cleanDist(cleanDistVar);
+  for (link of links) {
+    //Limpa a pasta de arquivos temporarios
+    cleanDist(cleanDistVar);
 
-  //   //Execução do programa
-  //   await iniciar(link.split(".com")[1], uploadVar);
-  // }
+    //Execução do programa
+    await iniciar(link.split(".com")[1], uploadVar);
+  }
 
-  // //Limpa a pasta de arquivos temporarios
-  // cleanDist(cleanDistVar);
+  //Limpa a pasta de arquivos temporarios
+  cleanDist(cleanDistVar);
 }
 start();
 

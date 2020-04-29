@@ -9,7 +9,7 @@ async function baixaPost(link) {
   const post = await api.get(link);
   const p = post.data[0].data.children[0].data;
   const data = {
-    title: p.title,
+    title: p.title.replace(/&amp;/, "&"),
     link: p.url,
     sub: p.subreddit_name_prefixed,
     ups:
@@ -33,6 +33,7 @@ async function baixaPost(link) {
       .replace(/[“”]/g, '"')
       .replace(/\*\*/g, "")
       .replace(/~~/g, "")
+      .replace(/&amp;/, "&")
       .split("\n")
       .filter((a) => a.length > 0),
   };
@@ -40,7 +41,6 @@ async function baixaPost(link) {
     `scripts/${data.title.replace("/", "-")}.json`,
     JSON.stringify(data)
   );
-  console.log(p);
   return data;
 }
 
@@ -51,6 +51,8 @@ async function searchPosts() {
   var time = "";
   var addFavOpc = "";
   var limit = 25;
+  var opc = "";
+  const links = [];
 
   //CARREGAR O SUBREDDIT
   //Carregar favs.json
@@ -168,14 +170,29 @@ async function searchPosts() {
   limit = readline.question(
     "> Digite o valor de posts que deseja buscar [Defalut = 25]: "
   );
-  limit = !limit ? 25 : limit;
+  limit = !limit ? 25 : Number(limit);
 
   const url = `${sub}/${filter}/?${time ? `t=${time}&` : ""}limit=${limit}`;
 
   const { data } = await api.get(url);
+  const offSet = data.data.dist - limit;
+  const posts = data.data.children;
 
-  //Fazer a pesquisa dos posts com offset
-  console.log(data);
+  for (var i = 0 + offSet; i < limit + offSet; i++) {
+    console.log(`> ${i + 1} =============================================`);
+    console.log("> Titulo:\t", posts[i].data.title.replace(/&amp;/, "&"));
+    console.log("> Link:\t\t", posts[i].data.url);
+    console.log("> Ups:\t\t", posts[i].data.ups);
+  }
+  console.log(`> 0 ===================Terminar==================`);
+  while (opc !== 0) {
+    opc = readline.questionInt(`> Selecione o post: `);
+    if (opc !== 0) {
+      if (!links.includes(posts[opc - 1].data.url))
+        links.push(posts[opc - 1].data.url);
+    }
+  }
+  return links;
 }
 
 module.exports = { baixaPost, searchPosts };
