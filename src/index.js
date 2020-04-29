@@ -43,18 +43,19 @@ async function start() {
 
   //Limpa a pasta de arquivos temporarios
   cleanDist(cleanDistVar);
+  exec("sh sh/criaGitkeep.sh");
 }
 start();
 
 function cleanVideos(cleanVar) {
   if (cleanVar) {
     console.log(`> Cleaning videos...`);
-    exec("sh limpaVideos.sh");
+    exec("sh sh/limpaVideos.sh");
   }
 }
 function cleanDist(cleanVar) {
   if (cleanVar) {
     console.log(`> Cleaning dist...`);
-    exec("sh limpaDist.sh");
+    exec("sh sh/limpaDist.sh");
   }
 }
