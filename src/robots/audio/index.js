@@ -9,6 +9,8 @@ async function baixaAudio({ story: script, title }) {
     const frases = paragrafo.split(/(?<=[.,?!:]\s)/);
     for (const [idFrase, frase] of frases.entries()) {
       if (frase.length > 0) {
+        var retry = 0;
+        var success = false;
         const nome = `dist/audio/${numPar + 1}.${idFrase + 1}.mp3`;
         const request = {
           input: { text: frase },
@@ -16,10 +18,20 @@ async function baixaAudio({ story: script, title }) {
           audioConfig: { audioEncoding: "LINEAR16" },
         };
         console.log(`> Downloading ${numPar + 1}.${idFrase + 1}.mp3`);
-
-        const [response] = await client.synthesizeSpeech(request);
-        const writeFile = util.promisify(fs.writeFile);
-        await writeFile(nome, response.audioContent, "binary");
+        while (retry < 5 && !success) {
+          try {
+            const [response] = await client.synthesizeSpeech(request);
+            const writeFile = util.promisify(fs.writeFile);
+            await writeFile(nome, response.audioContent, "binary");
+            success = true;
+          } catch (err) {
+            retry++;
+            console.log(
+              `> Retry ${retry} - Downloading ${numPar + 1}.${idFrase + 1}.mp3`
+            );
+          }
+        }
+        if (!success) process.exit(1);
       }
     }
   }
