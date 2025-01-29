@@ -1,4 +1,4 @@
-const jimp = require("jimp");
+const { Jimp, loadFont, measureTextHeight, measureText } = require("jimp");
 
 function getTitleWidth(upsWidth, textWidth, headerWidth, footerWidth) {
   if (upsWidth + 40 + textWidth > 1500) {
@@ -13,19 +13,19 @@ function getTitleWidth(upsWidth, textWidth, headerWidth, footerWidth) {
 }
 
 async function juntaTitulo(text) {
-  const header = await jimp.read("dist/composition/header.png");
-  const ups = await jimp.read("dist/composition/ups.png");
-  const footer = await jimp.read("assets/video/footer.png");
-  const titleFont = await jimp.loadFont("font/fnt/titulo/titulo.fnt");
-  const fundo = await jimp.read(1920, 1080, "#1a1a1b");
+  const header = await Jimp.read("dist/composition/header.png");
+  const ups = await Jimp.read("dist/composition/ups.png");
+  const footer = await Jimp.read("assets/video/footer.png");
+  const titleFont = await loadFont("font/fnt/titulo/titulo.fnt");
+  const fundo = new Jimp({ width: 1920, height: 1080, color: "#1a1a1b" });
   const titleImageWidth = getTitleWidth(
     ups.bitmap.width,
-    jimp.measureText(titleFont, text.trim()),
+    measureText(titleFont, text.trim()),
     header.bitmap.width,
     footer.bitmap.width
   );
 
-  const titleTextHeight = jimp.measureTextHeight(
+  const titleTextHeight = measureTextHeight(
     titleFont,
     text.trim(),
     titleImageWidth - 35 - ups.bitmap.width
@@ -34,7 +34,11 @@ async function juntaTitulo(text) {
   const titleHeight =
     header.bitmap.height + 80 + titleTextHeight + footer.bitmap.height;
 
-  const titleImage = await jimp.read(titleImageWidth, titleHeight, "#1a1a1b");
+  const titleImage = new Jimp({
+    width: titleImageWidth,
+    height: titleHeight,
+    color: "#1a1a1b",
+  });
   titleImage.composite(ups, 0, 0);
   titleImage.composite(header, ups.bitmap.width + 40, 0);
   titleImage.composite(
@@ -42,13 +46,13 @@ async function juntaTitulo(text) {
     ups.bitmap.width + 40,
     header.bitmap.height + 80 + titleTextHeight
   );
-  titleImage.print(
-    titleFont,
-    ups.bitmap.width + 40,
-    header.bitmap.height + 30,
-    text.trim(),
-    titleImageWidth - 40 - ups.bitmap.width
-  );
+  titleImage.print({
+    font: titleFont,
+    x: ups.bitmap.width + 40,
+    y: header.bitmap.height + 30,
+    text: text.trim(),
+    maxWidth: titleImageWidth - 40 - ups.bitmap.width,
+  });
 
   fundo.composite(
     titleImage,
@@ -60,74 +64,84 @@ async function juntaTitulo(text) {
 }
 
 async function criaHeader(sub, author, days) {
-  const subFont = await jimp.loadFont("./font/fnt/sub/sub.fnt");
-  const postedByFont = await jimp.loadFont("./font/fnt/postedby/postedBy.fnt");
+  const subFont = await loadFont("./font/fnt/sub/sub.fnt");
+  const postedByFont = await loadFont("./font/fnt/postedby/postedBy.fnt");
 
-  const verticalSub = jimp.measureTextHeight(subFont, sub, 1500);
-  const horizontalSub = jimp.measureText(subFont, sub);
+  const verticalSub = measureTextHeight(subFont, sub, 1500);
+  const horizontalSub = measureText(subFont, sub);
 
-  const postedByHorizontal = jimp.measureText(
+  const postedByHorizontal = measureText(
     postedByFont,
     `posted by ${author} ${days} days ago`
   );
   const [, subLogo] = sub.split("/");
-  const logo = await jimp.read(`assets/template/${subLogo.toLowerCase()}.png`);
+  const logo = await Jimp.read(`assets/template/${subLogo.toLowerCase()}.png`);
   const logoHorizontal = logo.bitmap.width;
   const logoVertical = logo.bitmap.height + 10;
 
-  const bolinha = await jimp.read("assets/template/bolinha.png");
+  const bolinha = await Jimp.read("assets/template/bolinha.png");
   const bolinhaHorizontal = bolinha.bitmap.width;
 
-  const header = await jimp.read(
-    logoHorizontal +
+  const header = new Jimp({
+    width:
+      logoHorizontal +
       horizontalSub +
       bolinhaHorizontal +
       postedByHorizontal +
       45,
-    logoVertical,
-    "#1a1a1b"
-  );
+    height: logoVertical,
+    color: "#1a1a1b",
+  });
 
   header.composite(logo, 0, 5);
-  header.print(
-    subFont,
-    logoHorizontal + 15,
-    logoVertical / 2 - verticalSub / 2,
-    sub
-  );
+  header.print({
+    font: subFont,
+    x: logoHorizontal + 15,
+    y: logoVertical / 2 - verticalSub / 2,
+    text: sub,
+  });
   header.composite(
     bolinha,
     logoHorizontal + 15 + horizontalSub + 15,
     logoVertical / 2 - bolinha.bitmap.height / 2
   );
-  header.print(
-    postedByFont,
-    logoHorizontal + 15 + horizontalSub + 15 + bolinhaHorizontal + 15,
-    logoVertical / 2 - verticalSub / 2,
-    `posted by ${author} ${days} day${days === "1" ? "" : "s"} ago`
-  );
+  header.print({
+    font: postedByFont,
+    x: logoHorizontal + 15 + horizontalSub + 15 + bolinhaHorizontal + 15,
+    y: logoVertical / 2 - verticalSub / 2,
+    text: `posted by ${author} ${days} day${days === "1" ? "" : "s"} ago`,
+  });
   header.write("dist/composition/header.png");
 }
 
 async function criaUps(ups) {
-  const upsFont = await jimp.loadFont("font/fnt/ups/ups.fnt");
-  const setaCima = await jimp.read("assets/template/setaCima.png");
-  const setaBaixo = await jimp.read("assets/template/setaBaixo.png");
+  const upsFont = await loadFont("font/fnt/ups/ups.fnt");
+  const setaCima = await Jimp.read("assets/template/setaCima.png");
+  const setaBaixo = await Jimp.read("assets/template/setaBaixo.png");
   const upsHeight = setaCima.bitmap.height + setaBaixo.bitmap.height + 90;
-  const upsWidth = jimp.measureText(upsFont, ups);
+  const upsWidth = measureText(upsFont, ups);
 
   const upsPositionX = 0;
   const upsPositionY =
-    upsHeight / 2 - jimp.measureTextHeight(upsFont, ups, upsWidth) / 2;
+    upsHeight / 2 - measureTextHeight(upsFont, ups, upsWidth) / 2;
 
-  const upsImage = await jimp.read(upsWidth, upsHeight, "#1a1a1b");
+  const upsImage = new Jimp({
+    width: upsWidth,
+    height: upsHeight,
+    color: "#1a1a1b",
+  });
   upsImage.composite(setaCima, upsWidth / 2 - setaCima.bitmap.width / 2, 0);
   upsImage.composite(
     setaBaixo,
     upsWidth / 2 - setaBaixo.bitmap.width / 2,
     upsHeight - setaBaixo.bitmap.height
   );
-  upsImage.print(upsFont, upsPositionX, upsPositionY, ups);
+  upsImage.print({
+    font: upsFont,
+    x: upsPositionX,
+    y: upsPositionY,
+    text: ups,
+  });
   upsImage.write("dist/composition/ups.png");
 }
 
@@ -139,13 +153,19 @@ async function criaTitulo(script) {
 }
 
 async function print(text, count, t, par) {
-  const image = await jimp.read(1920, 1080, "#1a1a1b");
-  const font = await jimp.loadFont(
+  const image = new Jimp({ width: 1920, height: 1080, color: "#1a1a1b" });
+  const font = await loadFont(
     "./font/fnt/NotoSans-Regular-32-white/NotoSans-Regular-32-white.fnt"
   );
-  const vertical = (1080 - jimp.measureTextHeight(font, t, 1800)) / 2;
+  const vertical = (1080 - measureTextHeight(font, t, 1800)) / 2;
   console.log(`> Making image ${par + 1}.${count + 1}.png`);
-  image.print(font, 60, vertical, `${text}`, 1800);
+  image.print({
+    font,
+    x: 60,
+    y: vertical,
+    text,
+    maxWidth: 1800,
+  });
   image.write(`dist/images/${par + 1}.${count + 1}.png`);
 }
 

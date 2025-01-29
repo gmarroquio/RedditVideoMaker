@@ -19,3 +19,5 @@ videos/*
 !dist/images/.gitkeep
 !scripts/.gitkeep
 !videos/.gitkeep
+
+.DS_Store

@@ -32,7 +32,7 @@ async function start() {
 
   if (process.argv.includes("-y")) await authenticate();
 
-  for (link of links) {
+  for (let link of links) {
     //Limpa a pasta de arquivos temporarios
     cleanDist(cleanDistVar);
 
