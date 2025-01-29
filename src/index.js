@@ -13,7 +13,7 @@ async function iniciar(link, uploadVar) {
   // const post = JSON.parse(fs.readFileSync("script.json", "utf-8"));
   await image.criaFotos(post);
   await image.criaTitulo(post);
-  await audio.baixaAudio(post);
+  // await audio.baixaAudio(post);
   await video.criaVideo(post);
   if (uploadVar) await upload(post);
 }

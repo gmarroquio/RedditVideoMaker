@@ -1,8 +1,11 @@
 const { Jimp, loadFont, measureTextHeight, measureText } = require("jimp");
 
+const width = 1080;
+const height = 1920;
+
 function getTitleWidth(upsWidth, textWidth, headerWidth, footerWidth) {
-  if (upsWidth + 40 + textWidth > 1500) {
-    return 1500;
+  if (upsWidth + 40 + textWidth > 0.8 * width) {
+    return 0.8 * width;
   }
   const widths = [
     upsWidth + 40 + headerWidth,
@@ -17,7 +20,7 @@ async function juntaTitulo(text) {
   const ups = await Jimp.read("dist/composition/ups.png");
   const footer = await Jimp.read("assets/video/footer.png");
   const titleFont = await loadFont("font/fnt/titulo/titulo.fnt");
-  const fundo = new Jimp({ width: 1920, height: 1080, color: "#1a1a1b" });
+  const fundo = new Jimp({ width, height, color: "#1a1a1b" });
   const titleImageWidth = getTitleWidth(
     ups.bitmap.width,
     measureText(titleFont, text.trim()),
@@ -56,8 +59,8 @@ async function juntaTitulo(text) {
 
   fundo.composite(
     titleImage,
-    960 - titleImage.bitmap.width / 2,
-    540 - titleImage.bitmap.height / 2
+    width / 2 - titleImage.bitmap.width / 2,
+    height / 2 - titleImage.bitmap.height / 2
   );
 
   fundo.write(`dist/images/Title.png`);
@@ -67,13 +70,10 @@ async function criaHeader(sub, author, days) {
   const subFont = await loadFont("./font/fnt/sub/sub.fnt");
   const postedByFont = await loadFont("./font/fnt/postedby/postedBy.fnt");
 
-  const verticalSub = measureTextHeight(subFont, sub, 1500);
+  const verticalSub = measureTextHeight(subFont, sub, 0.8 * width);
   const horizontalSub = measureText(subFont, sub);
 
-  const postedByHorizontal = measureText(
-    postedByFont,
-    `posted by ${author} ${days} days ago`
-  );
+  const postedByHorizontal = measureText(postedByFont, `posted by ${author}`);
   const [, subLogo] = sub.split("/");
   const logo = await Jimp.read(`assets/template/${subLogo.toLowerCase()}.png`);
   const logoHorizontal = logo.bitmap.width;
@@ -153,18 +153,18 @@ async function criaTitulo(script) {
 }
 
 async function print(text, count, t, par) {
-  const image = new Jimp({ width: 1920, height: 1080, color: "#1a1a1b" });
+  const image = new Jimp({ width, height, color: "#1a1a1b" });
   const font = await loadFont(
     "./font/fnt/NotoSans-Regular-32-white/NotoSans-Regular-32-white.fnt"
   );
-  const vertical = (1080 - measureTextHeight(font, t, 1800)) / 2;
+  const vertical = (height - measureTextHeight(font, t, 0.9 * width)) / 2;
   console.log(`> Making image ${par + 1}.${count + 1}.png`);
   image.print({
     font,
     x: 60,
     y: vertical,
     text,
-    maxWidth: 1800,
+    maxWidth: 0.9 * width,
   });
   image.write(`dist/images/${par + 1}.${count + 1}.png`);
 }

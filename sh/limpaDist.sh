@@ -1,6 +1,4 @@
-rm -r dist
-mkdir dist
-mkdir dist/audio
-mkdir dist/clips
-mkdir dist/composition
-mkdir dist/images
+# rm -r dist/audio/*
+rm -r dist/clips/*
+rm -r dist/composition/*
+rm -r dist/images/*

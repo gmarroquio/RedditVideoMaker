@@ -29,16 +29,14 @@ function juntaImgComAudioAsync(nome) {
 }
 
 function juntaClips(nomes, title, sub) {
-  const n = nomes.map((nome) => `dist/clips/${nome}.avi`);
-  const a = ffmpeg("dist/clips/Title.avi");
-  var inputs = a;
-  for (var i = 0; i < n.length; i++) {
-    inputs = inputs.input(n[i]);
+  const files = nomes.map((nome) => `dist/clips/${nome}.avi`);
+  var inputs = ffmpeg("dist/clips/Title.avi");
+  for (var i = 0; i < files.length; i++) {
+    inputs = inputs.input(files[i]);
   }
   return new Promise((resolve, reject) => {
     console.log("> Joining all clips");
     inputs
-      .input("assets/video/fim.avi")
       .on("end", () => resolve())
       .on("error", (err) => reject(err))
       .mergeToFile(`videos/${title} - ${sub.split("/")[1]}.mp4`);
@@ -47,11 +45,12 @@ function juntaClips(nomes, title, sub) {
 
 async function criaVideo(post) {
   const files = fs.readdirSync("dist/audio");
-  const nomesAux = files.map((a) => {
-    const i = a.lastIndexOf(".");
-    return a.slice(0, i);
-  });
-  nomesAux.push("fim");
+  const nomesAux = files
+    .map((a) => {
+      const i = a.lastIndexOf(".");
+      return a.slice(0, i);
+    })
+    .filter((name) => !!name);
 
   const nomes = nomesAux.sort((a, b) => {
     if (Number(a.split(".")[0]) - Number(b.split(".")[0]) !== 0) {
@@ -64,7 +63,7 @@ async function criaVideo(post) {
     }
   });
 
-  for (nome of nomes) {
+  for (let nome of nomes) {
     if (nome !== "fim") await juntaImgComAudioAsync(nome);
     else if (!fs.existsSync("assets/video/fim.avi")) {
       await juntaImgComAudioAsync(nome);
