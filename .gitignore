@@ -13,11 +13,13 @@ dist/composition/*
 dist/images/*
 scripts/*
 videos/*
+assets/*
 !dist/audio/.gitkeep
 !dist/clips/.gitkeep
 !dist/composition/.gitkeep
 !dist/images/.gitkeep
 !scripts/.gitkeep
 !videos/.gitkeep
+!assets/.gitkeep
 
 .DS_Store

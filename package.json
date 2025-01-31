@@ -11,9 +11,9 @@
     "express": "^4.17.1",
     "fluent-ffmpeg": "^2.1.2",
     "googleapis": "^49.0.0",
-    "jimp": "^1.6.0",
     "js-file-downloader": "^1.1.6",
     "puppeteer": "^3.0.0",
+    "pureimage": "^0.4.18",
     "readline-sync": "^1.4.10",
     "request": "^2.88.2",
     "request-promise": "^0.0.1"

@@ -7,13 +7,12 @@ const exec = require("child_process").exec;
 const fs = require("fs");
 
 async function iniciar(link, uploadVar) {
-  const post = await baixaPost(link);
+  const [post, comments] = await baixaPost(link);
   console.log(`> Making ${post.title} video`);
 
-  // const post = JSON.parse(fs.readFileSync("script.json", "utf-8"));
   await image.criaFotos(post);
   await image.criaTitulo(post);
-  // await audio.baixaAudio(post);
+  await audio.baixaAudio(post);
   await video.criaVideo(post);
   if (uploadVar) await upload(post);
 }

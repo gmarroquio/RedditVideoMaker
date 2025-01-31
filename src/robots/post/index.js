@@ -6,9 +6,13 @@ const hj = new Date();
 var readline = require("readline-sync");
 
 async function baixaPost(link) {
-  const post = await api.get(link);
-  const p = post.data[0].data.children[0].data;
-  const data = {
+  const {
+    data: [postData, commentsData],
+  } = await api.get(link);
+
+  const p = postData.data.children[0].data;
+
+  const post = {
     title: p.title.replace(/&amp;/, "&"),
     link: p.url,
     sub: p.subreddit_name_prefixed,
@@ -44,11 +48,39 @@ async function baixaPost(link) {
       .split("\n")
       .filter((a) => a.length > 0),
   };
-  fs.writeFileSync(
-    `scripts/${data.title.replace("/", "-")}.json`,
-    JSON.stringify(data)
-  );
-  return data;
+  const comments = [];
+
+  for (let c of commentsData.data.children.slice(0, 10)) {
+    comments.push({
+      comment: c.data.body
+        .replace(/[‘’]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\\\[/g, "")
+        .replace(/\\\]/g, "")
+        .replace(/\\/g, "")
+        .replace(/\*/g, "")
+        .replace(/[\[]/g, "[")
+        .replace(/[\]]/g, "]")
+        .replace(/\*\*/g, "")
+        .replace(/~~/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/\([\w+/:.-]+\)/g, "")
+        .split("\n")
+        .filter((a) => a.length > 0),
+    });
+  }
+
+  const folder = `scripts/${post.title
+    .replaceAll("/", "-")
+    .replaceAll(" ", "_")}/`;
+
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+
+  fs.writeFileSync(`${folder}/post.json`, JSON.stringify(post));
+
+  fs.writeFileSync(`${folder}/comments.json`, JSON.stringify(comments));
+
+  return [post, comments];
 }
 
 async function searchPosts() {

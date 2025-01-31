@@ -4,3 +4,4 @@ touch dist/audio/.gitkeep
 touch dist/clips/.gitkeep
 touch dist/composition/.gitkeep
 touch dist/images/.gitkeep
+touch assets/.gitkeep

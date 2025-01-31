@@ -4,6 +4,11 @@ const util = require("util");
 const credentials = require("../../../credentials/tts.json");
 const client = new tts.TextToSpeechClient({ credentials });
 
+const voiceConfig = {
+  voice: { languageCode: "en-GB", name: "en-GB-Journey-D" },
+  audioConfig: { audioEncoding: "LINEAR16" },
+};
+
 async function baixaAudio({ story: script, title }) {
   for (const [numPar, paragrafo] of script.entries()) {
     const frases = paragrafo.split(/(?<=[.,?!:]\s)/);
@@ -13,9 +18,8 @@ async function baixaAudio({ story: script, title }) {
         var success = false;
         const nome = `dist/audio/${numPar + 1}.${idFrase + 1}.mp3`;
         const request = {
+          ...voiceConfig,
           input: { text: frase },
-          voice: { languageCode: "en-US", name: "en-US-Wavenet-E" },
-          audioConfig: { audioEncoding: "LINEAR16" },
         };
         console.log(`> Downloading ${numPar + 1}.${idFrase + 1}.mp3`);
         while (retry < 5 && !success) {
@@ -37,9 +41,8 @@ async function baixaAudio({ story: script, title }) {
   }
   const nome = `dist/audio/Title.mp3`;
   const request = {
+    ...voiceConfig,
     input: { text: title },
-    voice: { languageCode: "en-US", name: "en-US-Wavenet-E" },
-    audioConfig: { audioEncoding: "LINEAR16" },
   };
   console.log(`> Downloading Title.mp3`);
 
